@@ -12,8 +12,7 @@ final class User: Model, Content {
     @Field(key: "name") var name: String
     @Field(key: "username") var username: String
     @Field(key: "password") var password: String
-    @Children(for: \.$user) var votes: [Vote]
-    @Children(for: \.$user) var topics: [Topic]
+//    @Children(for: \.$user) var votes: [Vote]
 
     
     init() {}

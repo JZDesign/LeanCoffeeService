@@ -10,7 +10,8 @@ public func configure(_ app: Application) throws {
 
     configureDatabase(app)
 
-    app.migrations.add(CreateTodo())
+    app.migrations.add(CreateUser())
+    app.migrations.add(CreateAdminUser())
 
     // register routes
     try routes(app)
