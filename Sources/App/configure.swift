@@ -15,6 +15,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateToken())
     app.migrations.add(CreateLeanCoffee())
     app.migrations.add(CreateTopic())
+    app.migrations.add(CreateVote())
 
 //    try app.autoRevert().wait()
 

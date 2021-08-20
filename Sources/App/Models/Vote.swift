@@ -7,17 +7,17 @@ final class Vote: Model, Content {
     
     @ID var id: UUID?
     @Field(key: "user") var user: UUID
-    @Field(key: "topic") var topic: UUID
+    @Parent(key: "topicId") var topic: Topic
     
     init() {}
     
     init(
         id: UUID? = nil,
-        topic: UUID,
+        topic: Topic.IDValue,
         user: UUID
     ) {
         self.user = user
-        self.topic = topic
+        self.$topic.id = topic
     }
 
 }

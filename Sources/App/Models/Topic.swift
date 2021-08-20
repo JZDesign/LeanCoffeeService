@@ -1,5 +1,6 @@
 import Fluent
 import Vapor
+import PostgresNIO
 
 final class Topic: Model, Content {
     static let schema = "topics"
@@ -12,7 +13,7 @@ final class Topic: Model, Content {
     @Field(key: "introducer") var introducer: UUID
     @Field(key: "completed") var completed: Bool
     @Parent(key: "leanCoffeeId") var leanCoffee: LeanCoffee
-
+    @Children(for: \.$topic) var votes: [Vote]
     
     init() {}
     
@@ -30,7 +31,6 @@ final class Topic: Model, Content {
         self.completed = completed
         self.$leanCoffee.id = leanCoffeeId
     }
-
 }
 
 struct CreateTopicData: Content {
