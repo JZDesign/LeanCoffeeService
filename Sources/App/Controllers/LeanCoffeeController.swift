@@ -21,11 +21,9 @@ struct LeanCoffeeController: RouteCollection {
         let data = try req.content.decode(CreateLeanCoffeeData.self)
         let user = try req.auth.require(User.self)
         
-        guard let id = user.id else { throw Abort(.unauthorized) }
-        
-        let leanCoffee = LeanCoffee(
+        let leanCoffee = try LeanCoffee(
             title: data.title,
-            host: id,
+            host: user.requireID(),
             date: Date()
         )
         

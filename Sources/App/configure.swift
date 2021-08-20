@@ -14,6 +14,10 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateAdminUser())
     app.migrations.add(CreateToken())
     app.migrations.add(CreateLeanCoffee())
+    app.migrations.add(CreateTopic())
+
+//    try app.autoRevert().wait()
+
     try app.autoMigrate().wait()
 
     // register routes
