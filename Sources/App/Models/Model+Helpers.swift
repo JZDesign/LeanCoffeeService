@@ -31,4 +31,9 @@ extension Request {
         
         return UUID(id)
     }
+    
+    func saveAndReturn<T: Model>(object: T) -> EventLoopFuture<T> {
+        object.save(on: db).map { object }
+    }
 }
+

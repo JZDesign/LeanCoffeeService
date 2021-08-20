@@ -21,7 +21,10 @@ final class LeanCoffee: Model, Content {
         self.title = title
         self.date = date
         self.host = host
-
     }
 
+}
+
+struct CreateLeanCoffeeData: Content {
+    let title: String
 }

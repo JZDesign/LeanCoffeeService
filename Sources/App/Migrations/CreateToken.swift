@@ -19,4 +19,4 @@ struct CreateToken: Migration {
         database.schema(Token.schema).delete()
     }
 }
-¬
+
