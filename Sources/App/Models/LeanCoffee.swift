@@ -16,7 +16,7 @@ final class LeanCoffee: Model, Content {
         id: UUID? = nil,
         title: String,
         host: UUID,
-        date: Date,
+        date: Date
     ) {
         self.title = title
         self.date = date

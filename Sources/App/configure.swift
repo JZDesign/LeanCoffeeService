@@ -12,6 +12,7 @@ public func configure(_ app: Application) throws {
 
     app.migrations.add(CreateUser())
     app.migrations.add(CreateAdminUser())
+    try app.autoMigrate().wait()
 
     // register routes
     try routes(app)
@@ -22,7 +23,7 @@ func configureDatabase(_ app: Application) {
     let hostname = Environment.get("DATABASE_HOST") ?? "localhost"
     let databaseUserName = Environment.get("DATABASE_USERNAME") ?? "vapor_username"
     let password = Environment.get("DATABASE_PASSWORD") ?? "vapor_password"
-    var database = Environment.get("DATABASE_NAME") ?? "vapor_database"
+    var database = Environment.get("DATABASE_NAME") ?? "lean_coffee_database"
     var databasePort = Environment.get("DATABASE_PORT").flatMap(Int.init) ?? PostgresConfiguration.ianaPortNumber
     
     if app.environment == .testing {

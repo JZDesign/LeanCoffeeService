@@ -13,11 +13,9 @@ final class Vote: Model, Content {
     
     init(
         id: UUID? = nil,
-        title: String,
         topic: UUID,
         user: UUID
     ) {
-        self.title = title
         self.user = user
         self.topic = topic
     }

@@ -10,6 +10,8 @@ final class Topic: Model, Content {
     @Field(key: "description") var description: String
     @Field(key: "introducer") var introducer: UUID
     @Field(key: "completed") var completed: Bool
+    @Parent(key: "leanCoffee") var leanCoffee: LeanCoffee
+
     
     init() {}
     
