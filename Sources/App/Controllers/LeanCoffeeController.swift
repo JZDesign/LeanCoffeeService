@@ -16,6 +16,10 @@ struct LeanCoffeeController: RouteCollection {
         route.get(":id", use: getByID)
         route.get(":id", "host", use: getHost)
         route.get(":id", "topics", use: getAllTopics)
+        
+        route.webSocket(":id", "live") { req, webSocket in
+            webSocket.send("connected")
+        }
 
     }
     

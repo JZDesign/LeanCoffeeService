@@ -11,7 +11,17 @@ func routes(_ app: Application) throws {
     app.get("hello") { req -> String in
         return "Hello, world!"
     }
-
+    
+    app.webSocket(":id", "live") { req, webSocket in
+        webSocket.send("connected")
+        webSocket.onText {
+            $0.send("text received: \($1)")
+        }
+        
+        webSocket.onPing {
+            $0.send("ping")
+        }
+    }
     try app.register(collection: UsersController())
     try app.register(collection: LeanCoffeeController())
     try app.register(collection: TopicController())

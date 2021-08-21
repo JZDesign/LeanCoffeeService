@@ -17,7 +17,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateTopic())
     app.migrations.add(CreateVote())
 
-    try app.autoRevert().wait()
+//    try app.autoRevert().wait()
 
     try app.autoMigrate().wait()
 

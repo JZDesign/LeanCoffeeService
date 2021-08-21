@@ -1,0 +1,976 @@
+{
+	"info": {
+		"_postman_id": "a56bae48-aae8-4c88-8839-6cfe58b4777b",
+		"name": "LeanCoffee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ready Endpoint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/ready",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"ready"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let userName = pm.variables.replaceIn(\"{{$randomUserName}}\")",
+							"let name = pm.variables.replaceIn(\"{{$randomUserName}}\")",
+							"pm.collectionVariables.set(\"name\", name);",
+							"pm.collectionVariables.set(\"username\", userName);",
+							"pm.collectionVariables.set(\"password\", userName);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"userid\", jsonData.id);",
+							"",
+							"pm.test(\"creates a user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"",
+							"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"name\"));",
+							"    pm.expect(jsonData.username).to.eql(pm.collectionVariables.get(\"username\"));",
+							"    pm.expect(jsonData.id).to.not.be.null;",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{name}}\",\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/users",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"",
+							"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"name\"));",
+							"    pm.expect(jsonData.username).to.eql(pm.collectionVariables.get(\"username\"));",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/users/{{userid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{userid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"user is found in all users\", function () {",
+							"    pm.expect(pm.response.text()).to.include(pm.collectionVariables.get(\"name\"));",
+							"    pm.expect(pm.response.text()).to.include(pm.collectionVariables.get(\"username\"));",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/users",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign In",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"access_token\", jsonData.value);",
+							"",
+							"pm.test(\"creates a user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.user).to.not.be.null;",
+							"    pm.expect(jsonData.value).to.not.be.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/users/login",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lean Coffee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"leancoffee_id\", jsonData.id);",
+							"",
+							"pm.test(\"creates a Lean Coffee\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.not.be.null;",
+							"    pm.expect(jsonData.host).to.not.be.null;",
+							"    pm.expect(jsonData.date).to.not.be.null;",
+							"    pm.expect(jsonData.title).to.eql(\"A title\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"A title\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/leancoffee",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"leancoffee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lean Coffee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"gets a Lean Coffee\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"leancoffee_id\"))",
+							"    pm.expect(jsonData.host).to.not.be.null;",
+							"    pm.expect(jsonData.date).to.not.be.null;",
+							"    pm.expect(jsonData.title).to.eql(\"A title\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/leancoffee/{{leancoffee_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"leancoffee",
+						"{{leancoffee_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Host of Lean Coffee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"gets the host of a Lean Coffee\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"userid\"))",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/leancoffee/{{leancoffee_id}}/host",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"leancoffee",
+						"{{leancoffee_id}}",
+						"host"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All topics in a  Lean Coffee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"All topics in a  Lean Coffee\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.count).to.not.eql(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/leancoffee/{{leancoffee_id}}/topics",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"leancoffee",
+						"{{leancoffee_id}}",
+						"topics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all Lean Coffees",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"A title\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/leancoffee",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"leancoffee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"topic_id\", jsonData.id);",
+							"",
+							"pm.test(\"creates a Topic\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.not.be.null;",
+							"    pm.expect(jsonData.introducer).to.not.be.null;",
+							"    pm.expect(jsonData.date).to.not.be.null;",
+							"    pm.expect(jsonData.title).to.eql(\"A title\")",
+							"    pm.expect(jsonData.completed).to.eql(false)",
+							"    pm.expect(jsonData.description).to.eql(\"\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"A title\",\n    \"leanCoffeeId\": \"{{leancoffee_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/topics",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"topics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"gets a Topic\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"topic_id\"))",
+							"    pm.expect(jsonData.introducer).to.not.be.null;",
+							"    pm.expect(jsonData.date).to.not.be.null;",
+							"    pm.expect(jsonData.title).to.eql(\"A title\")",
+							"    pm.expect(jsonData.completed).to.eql(false)",
+							"    pm.expect(jsonData.description).to.eql(\"\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/topics/{{topic_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"topics",
+						"{{topic_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topic Introducer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"gets the introducer of a topic\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"userid\"))",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/topics/{{topic_id}}/introducer",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"topics",
+						"{{topic_id}}",
+						"introducer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topic Votes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/topics/{{topic_id}}/votes",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"topics",
+						"{{topic_id}}",
+						"votes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topic Lean Coffee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"gets the lean coffee of a topic\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"leancoffee_id\"))",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/topics/{{topic_id}}/leancoffee",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"topics",
+						"{{topic_id}}",
+						"leancoffee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all Topics",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"A title\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/topics",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"topics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vote",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"voteid\", jsonData.id",
+							")",
+							"pm.test(\"creates a Vote\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.not.be.null;",
+							"    pm.expect(jsonData.topic).to.not.be.null;",
+							"    pm.expect(jsonData.user).to.eql(pm.collectionVariables.get(\"userid\"))",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"topicId\": \"{{topic_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/votes",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"votes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vote",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"gets a Vote\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"voteid\"))",
+							"    pm.expect(jsonData.topic).to.not.be.null;",
+							"    pm.expect(jsonData.user).to.eql(pm.collectionVariables.get(\"userid\"))",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/votes/{{voteid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"votes",
+						"{{voteid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all Votes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"gets all Votes\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.count).to.not.eql(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/votes",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"votes"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://127.0.0.1:8080"
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "z",
+			"value": "userid"
+		},
+		{
+			"key": "userid",
+			"value": "}"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "leancoffee_id",
+			"value": ""
+		},
+		{
+			"key": "topic_id",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "voteid",
+			"value": ""
+		}
+	]
+}
