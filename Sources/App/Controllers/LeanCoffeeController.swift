@@ -15,6 +15,8 @@ struct LeanCoffeeController: RouteCollection {
         route.get(use: getAll)
         route.get(":id", use: getByID)
         route.get(":id", "host", use: getHost)
+        route.get(":id", "topics", use: getAllTopics)
+
     }
     
     func create(_ req: Request) throws -> EventLoopFuture<LeanCoffee> {
@@ -45,6 +47,29 @@ struct LeanCoffeeController: RouteCollection {
             .flatMap {
                 User.findAndUnwrap($0.host, on: req.db)
                     .map(\.public)
+            }
+    }
+    
+    func getAllTopics(_ req: Request) throws -> EventLoopFuture<[HydratedTopic]> {
+        LeanCoffee
+            .query(on: req.db)
+            .with(\.$topics) {
+                $0.with(\.$votes)
+            }
+            .all()
+            .flatMapThrowing { leanCoffies in
+                try leanCoffies.flatMap { lc in
+                    try lc.topics.compactMap {
+                        try HydratedTopic(
+                            id: $0.requireID(),
+                            title: $0.title,
+                            introducer: $0.introducer,
+                            description: $0.description,
+                            completed: $0.completed,
+                            votes: $0.votes
+                        )
+                    }
+                }
             }
     }
 }

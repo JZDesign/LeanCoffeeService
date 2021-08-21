@@ -38,3 +38,29 @@ struct CreateTopicData: Content {
     let description: String?
     let leanCoffeeId: UUID
 }
+
+struct HydratedTopic: Content {
+    
+    let id: UUID
+    let title: String
+    let introducer: UUID
+    let description: String
+    let completed: Bool
+    let votes: [Vote]
+    
+    init(
+        id: UUID,
+        title: String,
+        introducer: UUID,
+        description: String,
+        completed: Bool = false,
+        votes: [Vote]
+    ) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.introducer = introducer
+        self.completed = completed
+        self.votes = votes
+    }
+}

@@ -16,6 +16,7 @@ struct TopicController: RouteCollection {
         route.get(":id", use: getByID)
         route.get(":id", "leancoffee", use: getLeanCoffee)
         route.get(":id", "introducer", use: getIntroducer)
+        route.get(":id", "votes", use: getAllVotes)
     }
     
     func create(_ req: Request) throws -> EventLoopFuture<Topic> {
@@ -57,5 +58,11 @@ struct TopicController: RouteCollection {
             .flatMap {
                 LeanCoffee.findAndUnwrap($0.$leanCoffee.id, on: req.db)
             }
+    }
+    
+    func getAllVotes(_ req: Request) throws -> EventLoopFuture<[Vote]> {
+        Topic
+            .findAndUnwrap(req.getID(), on: req.db)
+            .flatMap { $0.$votes.get(on: req.db) }
     }
 }

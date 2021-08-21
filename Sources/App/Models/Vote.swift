@@ -21,3 +21,7 @@ final class Vote: Model, Content {
     }
 
 }
+
+final class SubmitVote: Content {
+    let topicId: UUID
+}

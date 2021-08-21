@@ -15,4 +15,5 @@ func routes(_ app: Application) throws {
     try app.register(collection: UsersController())
     try app.register(collection: LeanCoffeeController())
     try app.register(collection: TopicController())
+    try app.register(collection: VoteController())
 }
