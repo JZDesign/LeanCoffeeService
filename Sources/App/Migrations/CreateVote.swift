@@ -9,6 +9,7 @@ struct CreateVote: Migration {
             .id()
             .field("user", .uuid, .required)
             .field("topicId", .uuid, .required, .references(Topic.schema, "id"))
+            .unique(on: "user", "topicId")
             .create()
     }
     
