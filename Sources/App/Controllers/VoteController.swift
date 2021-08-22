@@ -25,7 +25,24 @@ struct VoteController: RouteCollection {
             user: user.requireID()
         )
         
-        return req.saveAndReturn(object: vote)
+        return Vote
+            .query(on: req.db)
+            .with(\.$topic)
+            .all()
+            .flatMapThrowing { allVotes in
+                let dupe = allVotes
+                    .filter {
+                        $0.user == user.id
+                        && $0.topic.id == data.topicId
+                    }
+                if dupe.count > 0 {
+                    throw Abort(.conflict)
+                }
+            }
+            .flatMapThrowing {
+                try vote.save(on: req.db)
+                return vote
+            }
     }
     
     

@@ -344,6 +344,8 @@ After that it's bearer token auth
 
 ### Cast vote
 
+*This must be unique per topic and user. If a user tries to vote twice on a topic, the server will return a conflict.*
+
 **POST** `{{URL}}/api/votes`
 
 
