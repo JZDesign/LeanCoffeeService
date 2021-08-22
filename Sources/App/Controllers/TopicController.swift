@@ -12,11 +12,15 @@ struct TopicController: RouteCollection {
             .grouped(authMiddleWare, guardMiddleWare)
 
         route.post(use: create)
+        
         route.get(use: getAll)
         route.get(":id", use: getByID)
+        
         route.get(":id", "leancoffee", use: getLeanCoffee)
         route.get(":id", "introducer", use: getIntroducer)
         route.get(":id", "votes", use: getAllVotes)
+        
+        route.post(":id", "complete", use: completeTopic)
     }
     
     func create(_ req: Request) throws -> EventLoopFuture<Topic> {
@@ -64,5 +68,15 @@ struct TopicController: RouteCollection {
         Topic
             .findAndUnwrap(req.getID(), on: req.db)
             .flatMap { $0.$votes.get(on: req.db) }
+    }
+    
+    func completeTopic(_ req: Request) throws -> EventLoopFuture<Topic> {
+        Topic
+            .findAndUnwrap(req.getID(), on: req.db)
+            .map {
+                $0.completed = true
+                $0.save(on: req.db)
+                return $0
+            }
     }
 }
