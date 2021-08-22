@@ -271,6 +271,30 @@ After that it's bearer token auth
 }
 ```
 
+### Complete Topic
+
+*The only way to update a topic (currently) and mark it as complete.*
+
+**POST** `{{URL}}/api/topics/{{topic_id}}/complete`
+
+
+**Header** `Authorization: Bearer {{token value}}`
+
+**Response**
+
+```json
+{
+    "leanCoffee": {
+        "id": "BE43F38A-4E52-4DC7-B8B7-0AEFCE42F914"
+    },
+    "id": "C6645F36-4DDB-44F4-8C76-1FB25A236A53",
+    "introducer": "478E0ACB-DFC5-432B-B553-321399AF3735",
+    "title": "A title",
+    "completed": true,
+    "description": ""
+}
+```
+
 ### Get Topic Introducer
 
 *The introducer is the use who created the topic in a lean coffee*
