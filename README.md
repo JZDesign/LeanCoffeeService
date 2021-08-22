@@ -1,6 +1,11 @@
 # LeanCoffeeService
 
-## Things to note
+![Swift](https://img.shields.io/badge/Swift-FA7343?logo=swift&logoColor=white)
+![Made with Vapor](https://img.shields.io/badge/vapor-4-df43f6.svg?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAAEzo7pQAAABmFBMVEUAAAD%2F%2F%2F%2F%2FgP%2F%2FgP9mzP9V1f%2BA1f9Vxv9G0f9EzP9L0v9Dyf9Sv%2F9Pwf9Gxf9Exv9Fx%2F9Gxf%2FbSffbSPeiePuifPtFxv9Dxv%2FVTvjVUfiza%2FhlqPxFxv1Fxv1ExP1Exv1Ut%2FtTt%2FtExP1Fxf3bRvZExf2YgPiYgPrMVvi6ZPhDxP1Exf1Exf1Exf1uofpDxPxDxfzCW%2FjcSPbcSPePhfqPhvrTTfbUTvipcPmpcvpDxP1Exf1ExP12mvpExP1Exf3aR%2FaGjfqHjvtdsPxDxP1Exf1Dxf1LvfxLvv1Exf1%2Fk%2Ft%2FlPvbSPdDxf1DxPxLvftLvfxLvvxTtvtUt%2Fxbr%2Ftcr%2FtcsPtkqPpkqPtlqPtlqftsofptofptovt1mvp1m%2Fp2m%2Fp9k%2Fl%2Bk%2Fp%2BlPqGjPmGjPqGjfqHjfqOhfmPhfmPhvmPhvqXfviXfvmXf%2FmYf%2Fmfd%2Figd%2FigePmocPiocfipcfmwafewafixafixavi4Yve5Yve5Y%2FjBW%2FfCW%2FfCXPfCXPjJVPbKVPbKVPfKVffSTfbSTvfTTvcWkpKnAAAATnRSTlMAAQIEBQYGCQsPERMcHSwxOz4%2FQEJCQ0hISEpYZ291eIaHi42OkpKSlZeYmZ6mqa6vuMvLzc3Q0NPT1NfZ4eLl5ujo6e%2Fw9vj4%2Bfn5%2Bf4Ap2wWAAAB8ElEQVQ4y31QiULTQBBdqCKHNx4I3qKAIgreKIKCt10S2rShB9A00ja2SFI0hja2KG1%2Fm5lszlp9Ozu7783s7swSQnoJgMIUYgIhqqoSBgpajxAj5Mw2k15QJ0BpP6wfM1JWyqBSN81ayIr1Eef0rJtsrQPU3kVjghDtgY2UzWakT7DRNG1bOwubUL1mmsSFfdLBebzhnMefUwuzDn%2FH8xzP88vL7xmfSiVT6RRacsoSHimFQl75qihK4SFL0XXDQNN199YnzVar%2BTjw8H0SxCV6McB7oYojfgHLCvv4pFXoHZcfZpXTQ47wxhaWbH6M43iOQ3eUCYsxRBTmIhPSqTRaEhwTMlnJAqxMUPLYKDScV5iAv6yqGv42E4ah8Z%2BG%2FsMwhu13p3%2FVzHqtbk67pQ61Go1G8wLpgHv0LvkPTnyAht4e%2F2f8tt3zzc7h%2Fnnq4GVfh%2FipMPUQPvlX%2FAoN4nJb%2FAZtx%2FVA%2FFpkJbICiNgTXOSqLz4SFxOJeFyERYwnRHHV4iNewtz6xtr6GtgGOiTI57yEVzn5S07GIcubcg4M%2BWsv4VapVCxt4ShuFUvfgCAf8xK6n5bLO9%2FLOzBsA%2Fes29%2FGxG61UqlUwYNVwXYn2j4iNL73Z29%2FH%2BZvdOOhDp%2FdNTg6s%2FB54cHo6S6fegA%2BKLJ63g4njwAAAABJRU5ErkJggg%3D%3D)
+
+This API is intended for use in the Ramsey Mobile Chapter's learning series where they'll create a Lean Coffee app in all mobile frameworks. 
+
+### Things to note
 
 When signing in Authentication is basic.
 
@@ -11,7 +16,25 @@ After that it's bearer token auth
 
 # API Docs
 
-## Create User
+## Entities
+
+|Name|Description|
+|:--|:--|
+|User| The user who will create lean coffees, topics or votes |
+|Lean Coffee| The primary entity that user's will interact with. The Lean Coffee will have many Topic's as children|
+|Topic| The topic to be discussed in a lean coffee. This is the child of a Lean Coffee and will have votes as children |
+|Vote| A vote is not a "Yay" or "Nay" in the Lean Coffee service. Instead the presence of a vote is indicative of the user's interest in the topic. This is the child of a topic and will have no children|
+
+![Entity Relationship](https://lucid.app/publicSegments/view/d3a417e3-e69e-4999-8933-96eb96bd09bb/image.png)
+
+
+## Endpoints
+
+<details>
+<summary>Create User</summary>
+    
+
+### Create User
 
 
 **POST** `{{URL}}/api/users`
@@ -36,23 +59,12 @@ After that it's bearer token auth
 }
 ```
 
+</details>
 
-## Get User
+<details>
+<summary>Sign In</summary>
 
-
-**GET** `{{URL}}/api/users/{{userid}}`
-
-**Response**
-
-```json
-{
-    "id": "478E0ACB-DFC5-432B-B553-321399AF3735",
-    "name": "Domenica71",
-    "username": "Elsie_Walsh"
-}
-```
-
-## Sign In
+### Sign In
 
 **POST** `{{URL}}/api/users/login`
 
@@ -72,7 +84,12 @@ After that it's bearer token auth
 
 **Note** the "value" is the bearer token you need to store.
 
-## Create Lean Coffee 
+</details>
+
+<details>
+<summary>Lean Coffee</summary>
+    
+### Create Lean Coffee 
 
 **POST** `{{URL}}/api/leancoffee`
 
@@ -98,7 +115,7 @@ After that it's bearer token auth
 }
 ```
 
-## Get Lean Coffee
+### Get Lean Coffee
 
 **GET** `{{URL}}/api/leancoffee/{{leancoffee_id}}`
 
@@ -116,7 +133,7 @@ After that it's bearer token auth
 ```
 
 
-## Get all topics in a Lean Coffee
+### Get all topics in a Lean Coffee
 
 **GET** `{{URL}}/api/leancoffee/{{leancoffee_id}}/topics`
 
@@ -144,7 +161,9 @@ After that it's bearer token auth
     },
 ]
 ```
-## Get Lean Coffee Host
+### Get Lean Coffee Host
+
+*The host is the creator of the lean coffee in the system*
 
 **GET** `{{URL}}/api/leancoffee/{{leancoffee_id}}/host`
 
@@ -161,7 +180,7 @@ After that it's bearer token auth
 ```
 
 
-## Get all Lean Coffee events
+### Get all Lean Coffee events
 
 **GET** `{{URL}}/api/leancoffee/`
 
@@ -192,7 +211,12 @@ After that it's bearer token auth
 ]
 ```
 
-## Create Topic
+</details>
+
+<details>
+<summary>Topics</summary>
+    
+### Create Topic
 
 **POST** `{{URL}}/api/topics`
 
@@ -224,7 +248,7 @@ After that it's bearer token auth
 }
 ```
 
-## Get Topic
+### Get Topic
 
 **GET** `{{URL}}/api/topics/{{topic_id}}`
 
@@ -247,7 +271,9 @@ After that it's bearer token auth
 }
 ```
 
-## Get Topic Introducer
+### Get Topic Introducer
+
+*The introducer is the use who created the topic in a lean coffee*
 
 **GET** `{{URL}}/api/topics/{{topic_id}}/introducer`
 
@@ -265,7 +291,7 @@ After that it's bearer token auth
 }
 ```
 
-## Get Topic Votes
+### Get Topic Votes
 
 **GET** `{{URL}}/api/topics/{{topic_id}}/votes`
 
@@ -287,26 +313,12 @@ After that it's bearer token auth
 ]
 ```
 
-## Get Topic's parent lean coffee
+</details>
 
-**GET** `{{URL}}/api/topics/{{topic_id}}/leancoffee`
+<details>
+<summary>Vote</summary>
 
-
-**Header** `Authorization: Bearer {{token value}}`
-
-
-**Response**
-
-```json
-{
-    "id": "BE43F38A-4E52-4DC7-B8B7-0AEFCE42F914",
-    "title": "A title",
-    "host": "478E0ACB-DFC5-432B-B553-321399AF3735",
-    "date": "2021-08-21T00:00:00Z"
-}
-```
-
-## Cast vote
+### Cast vote
 
 **POST** `{{URL}}/api/votes`
 
@@ -333,3 +345,5 @@ After that it's bearer token auth
     }
 }
 ```
+
+</details>

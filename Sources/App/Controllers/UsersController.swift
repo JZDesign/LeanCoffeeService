@@ -3,31 +3,23 @@ import Vapor
 struct UsersController: RouteCollection {
     
     func boot(routes: RoutesBuilder) throws {
-        let route = routes.grouped("api", "users")
-        
-        route.post(use: createUser) // delete this and replace with ...
-        /**
-         
-         let tokenAuthMiddleware = Token.authenticator()
-         let guardAuthMiddleware = User.guardMiddleware()
-         let tokenAuthGroup = usersRoute.grouped(
-            tokenAuthMiddleware,
-            guardAuthMiddleware)
-         tokenAuthGroup.post(use: createUser)
-         
-         //[BOOK] Again, using tokenAuthMiddleware and guardAuthMiddleware ensures only authenticated users can create other users. This prevents anyone from creating a user to send requests to the routes you’ve just protected!
-
-         //[BOOK] Now all API routes that can perform “destructive” actions — that is create, edit or delete resources — are protected. For those actions, the application only accept requests from authenticated users.
-         
-         // I think I would prefer to inspect the token and make sure the user has authority to make a change instead of doing this...
-         */
-        
-        
-        route.get(use: getAll)
-        route.get(":userID", use: getUser)
-        
+       
+        let authMiddleWare = Token.authenticator()
+        let guardMiddleWare = User.guardMiddleware()
         let basicAuthMiddleware = User.authenticator()
+        
+        let route = routes.grouped("api", "users")
+    
+        let protectedRoutes = route
+            .grouped(authMiddleWare, guardMiddleWare)
+        
         let basicAuthGroup = route.grouped(basicAuthMiddleware)
+        
+        route.post(use: createUser)
+        
+        protectedRoutes.get(use: getAll)
+        protectedRoutes.get(":userID", use: getUser)
+        
         basicAuthGroup.post("login", use: loginHandler)
         
     }
