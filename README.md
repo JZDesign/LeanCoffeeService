@@ -297,7 +297,7 @@ After that it's bearer token auth
 
 ### Get Topic Introducer
 
-*The introducer is the user who created the topic in a lean coffee*
+*The introducer is the userd who created the topic in a lean coffee*
 
 **GET** `{{URL}}/api/topics/{{topic_id}}/introducer`
 

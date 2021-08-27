@@ -1,0 +1,20 @@
+#if(count(leanCoffeeEvents) > 0):
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th>Lean Coffee</th>
+        </tr>
+        </thead>
+        <tbody>
+            #for(lc in leanCoffeeEvents):
+                <tr>
+                <td>
+                <a href="/leanCoffee/#(lc.id)">#(lc.title)</a>
+                </td>
+                </tr>
+            #endfor
+        </tbody>
+    </table>
+#else:
+    <h2>There aren’t any Lean Coffee events yet!</h2>
+#endif
