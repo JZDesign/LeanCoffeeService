@@ -11,7 +11,22 @@ struct LeanCoffeeContext: Encodable {
     func view(_ req: Request) -> EventLoopFuture<View> { req.view.render("leanCoffee", self) }
 
     static func handler(_ req: Request) -> EventLoopFuture<View> {
-        guard let id = req.getID("leanCoffeeID") else {
+        getHydratedTopics(req, idKey: "leanCoffeeID")
+            .flatMap { leanCoffee, topics in
+                User.findAndUnwrap(leanCoffee.host, on: req.db)
+                    .flatMap { user in
+                        LeanCoffeeContext(
+                            title: leanCoffee.title,
+                            leanCoffee: leanCoffee,
+                            topics: topics,
+                            user: user)
+                            .view(req)
+                    }
+            }
+    }
+    
+    static func getHydratedTopics(_ req: Request, idKey: String) -> EventLoopFuture<(LeanCoffee, [HydratedTopic])> {
+        guard let id = req.getID(idKey) else {
             return req.eventLoop.makeFailedFuture(Abort(.notFound))
         }
         
@@ -33,17 +48,6 @@ struct LeanCoffeeContext: Encodable {
                     )
                 }
                 return (leanCoffee, topics) as (LeanCoffee, [HydratedTopic])
-            }
-            .flatMap { leanCoffee, topics in
-                User.findAndUnwrap(leanCoffee.host, on: req.db)
-                    .flatMap { user in
-                        LeanCoffeeContext(
-                            title: leanCoffee.title,
-                            leanCoffee: leanCoffee,
-                            topics: topics,
-                            user: user)
-                            .view(req)
-                    }
             }
     }
     
