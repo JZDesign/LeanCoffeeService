@@ -30,7 +30,6 @@ struct Router {
         try signInOutRoutes()
         try userRoutes()
         try leanCoffeeRoutes()
-//        try categoryRoutes()
     }
     
     private func registraionRoutes() throws {
@@ -59,50 +58,26 @@ struct Router {
         )
     }
     
-    private func acronymRoutes() throws {
-//
-//        sessionRoute.get(
-//            .acronyms,
-//            .parameter(.acronymID),
-//            handler: AcronymContext.handler
-//        )
-//
+    private func topicRoutes() throws {
 //        protectedRoute.get(
-//            .acronyms,
-//            .create,
-//            handler: CreateAcronymContext.handler
-//        )
+//            .leanCoffee,
+//            .parameter(.leanCoffeeID),
+//            .topics,
+//            handler: )
 //
 //        protectedRoute.post(
-//            .acronyms,
-//            .create,
-//            handler: CreateAcronymContext.postHandler
-//        )
-//
-//        protectedRoute.get(
-//            .acronyms,
-//            .parameter(.acronymID),
-//            .edit,
-//            handler: EditAcronymContext.handler
-//        )
-//
-//        protectedRoute.post(
-//            .acronyms,
-//            .parameter(.acronymID),
-//            .edit,
-//            handler: EditAcronymContext.postHandler
-//        )
+//            .leanCoffee,
+//            .parameter(.leanCoffeeID),
+//            .topics,
+//            handler: )
     }
+    
     
     private func userRoutes() throws {
         sessionRoute.get(.users, .parameter(.userID), handler: UserContext.handler)
         sessionRoute.get(.users, handler: AllUsersContext.handler)
     }
     
-    private func categoryRoutes() throws {
-//        sessionRoute.get(.categories, handler: AllCategoriesContext.handler)
-//        sessionRoute.get(.categories, .parameter(.categoryID), handler: CategoryContext.handler)
-    }
     
     private func logoutHandler(_ req: Request) -> Response {
         req.auth.logout(User.self)
@@ -111,11 +86,11 @@ struct Router {
 }
 
 enum LeanCoffeePathParameter: String {
-    case userID, leanCoffeeID
+    case userID, leanCoffeeID, topicID
 }
 
 enum LeanCoffeePath {
-    case login, logout, register, create, leanCoffee, topic, vote, edit, users, parameter(LeanCoffeePathParameter)
+    case login, logout, register, create, leanCoffee, topics, votes, edit, users, parameter(LeanCoffeePathParameter)
     
     var path: PathComponent {
         switch self {
@@ -125,8 +100,8 @@ enum LeanCoffeePath {
         case .register: return "register"
         case .create: return "create"
         case .leanCoffee: return "leanCoffee"
-        case .topic: return "topic"
-        case .vote: return "vote"
+        case .topics: return "topics"
+        case .votes: return "votes"
         case .edit: return "edit"
         case .users: return "users"
         }
