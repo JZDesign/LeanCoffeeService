@@ -10,47 +10,22 @@ struct LeanCoffeeContext: Encodable {
 
     func view(_ req: Request) -> EventLoopFuture<View> { req.view.render("leanCoffee", self) }
 
-    static func handler(_ req: Request) -> EventLoopFuture<View> {
-        getHydratedTopics(req, idKey: "leanCoffeeID")
-            .flatMap { leanCoffee, topics in
-                User.findAndUnwrap(leanCoffee.host, on: req.db)
-                    .flatMap { user in
-                        LeanCoffeeContext(
-                            title: leanCoffee.title,
-                            leanCoffee: leanCoffee,
-                            topics: topics,
-                            user: user)
-                            .view(req)
-                    }
-            }
-    }
-    
-    static func getHydratedTopics(_ req: Request, idKey: String) -> EventLoopFuture<(LeanCoffee, [HydratedTopic])> {
-        guard let id = req.getID(idKey) else {
-            return req.eventLoop.makeFailedFuture(Abort(.notFound))
-        }
-        
-        return LeanCoffee
-            .query(on: req.db)
-            .filter(\.$id == id)
-            .with(\.$topics, { $0.with(\.$votes) })
-            .first()
-            .unwrap(or: Abort(.notFound))
-            .flatMapThrowing { leanCoffee in
-                let topics = try leanCoffee.topics.compactMap {
-                    try HydratedTopic(
-                        id: $0.requireID(),
-                        title: $0.title,
-                        introducer: $0.introducer,
-                        description: $0.description,
-                        completed: $0.completed,
-                        votes: $0.votes
-                    )
+    static func handler(_ req: Request) throws -> EventLoopFuture<View> {
+        let user = try req.auth.require(User.self)
+
+        return LeanCoffeeController.getHydratedTopics(req, idKey: "leanCoffeeID")
+            .flatMap { (leanCoffee, topics) in
+                let sorted = topics.sorted { $1.votes.count < $0.votes.count
                 }
-                return (leanCoffee, topics) as (LeanCoffee, [HydratedTopic])
+                return LeanCoffeeContext(
+                    title: leanCoffee.title,
+                    leanCoffee: leanCoffee,
+                    topics: sorted,
+                    user: user)
+                    .view(req)
             }
     }
-    
+        
     static func deleteHandler(_ req: Request) -> EventLoopFuture<Response> {
         LeanCoffee.findAndUnwrap("leanCoffeeID", with: req)
             .flatMap {

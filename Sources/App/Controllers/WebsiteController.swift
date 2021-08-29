@@ -6,10 +6,10 @@ struct WebsiteController: RouteCollection {
         let sessionRoute = routes.grouped(User.sessionAuthenticator())
         let protectedRoute = sessionRoute.grouped(User.redirectMiddleware(path: LeanCoffeePath.login.value))
         let authRoute = sessionRoute.grouped(User.credentialsAuthenticator())
-//        routes.get(use:{
-//            $0.view.render("index")
-//        })
-
+        //        routes.get(use:{
+        //            $0.view.render("index")
+        //        })
+        
         try Router(
             sessionRoute: sessionRoute,
             protectedRoute: protectedRoute,
@@ -30,6 +30,7 @@ struct Router {
         try signInOutRoutes()
         try userRoutes()
         try leanCoffeeRoutes()
+        try topicRoutes()
     }
     
     private func registraionRoutes() throws {
@@ -59,17 +60,31 @@ struct Router {
     }
     
     private func topicRoutes() throws {
-//        protectedRoute.get(
-//            .leanCoffee,
-//            .parameter(.leanCoffeeID),
-//            .topics,
-//            handler: )
-//
-//        protectedRoute.post(
-//            .leanCoffee,
-//            .parameter(.leanCoffeeID),
-//            .topics,
-//            handler: )
+        protectedRoute.get(
+            .topics,
+            .parameter(.topicID),
+            handler: TopicContext.handler)
+        
+        protectedRoute.get(
+            .leanCoffee,
+            .parameter(.leanCoffeeID),
+            .topics,
+            .create,
+            handler: CreateTopicContext.handler)
+        
+        protectedRoute.post(
+            .leanCoffee,
+            .parameter(.leanCoffeeID),
+            .topics,
+            .create,
+            handler: CreateTopicContext.postHandler)
+        
+        protectedRoute.get(
+            .topics,
+            .parameter(.topicID),
+            .votes,
+            .create,
+            handler: TopicContext.voteHandler)
     }
     
     

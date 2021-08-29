@@ -3,13 +3,15 @@
         <h1>#(leanCoffee.title)</h1>
         
         <p>Created by <a href="/users/#(user.id)/">#(user.name)</a></p>
-        #for(topic in leanCoffee.topics):
-            <p>#(topic.title): Votes: #count(topic.votes)</p>
+        #for(topic in topics):
+            <a href="../topics/#(topic.id)"><p>#(topic.title): Votes: #count(topic.votes)</p></a>
         #endfor
 
+
+        <a href="#(leanCoffee.id)/topics/create"> Create a topic </a>
 <!--         
         <form method="post" action="/leanCoffee/#(leanCoffee.id)/delete">
-            <a class="btn btn-primary" href="/leanCoffee/#(leanCoffee.id)/edit" role="button">Edit</a>&nbsp;
+            <a class="btn btn-primary" href="/leanCoffee/#(leanCoffee.id)/edit" role="button">Edit</a>
             <input class="btn btn-danger" type="submit" value="Delete" />
         </form> -->
 

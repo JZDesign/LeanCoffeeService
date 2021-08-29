@@ -56,7 +56,33 @@ struct LeanCoffeeController: RouteCollection {
     }
     
     func getAllTopics(_ req: Request) throws -> EventLoopFuture<[HydratedTopic]> {
-        LeanCoffeeContext.getHydratedTopics(req, idKey: "id")
+        LeanCoffeeController.getHydratedTopics(req, idKey: "id")
             .map { $0.1 }
+    }
+    
+    static func getHydratedTopics(_ req: Request, idKey: String) -> EventLoopFuture<(LeanCoffee, [HydratedTopic])> {
+        guard let id = req.getID(idKey) else {
+            return req.eventLoop.makeFailedFuture(Abort(.notFound))
+        }
+        
+        return LeanCoffee
+            .query(on: req.db)
+            .filter(\.$id == id)
+            .with(\.$topics, { $0.with(\.$votes) })
+            .first()
+            .unwrap(or: Abort(.notFound))
+            .flatMapThrowing { leanCoffee in
+                let topics = try leanCoffee.topics.compactMap {
+                    try HydratedTopic(
+                        id: $0.requireID(),
+                        title: $0.title,
+                        introducer: $0.introducer,
+                        description: $0.description,
+                        completed: $0.completed,
+                        votes: $0.votes
+                    )
+                }
+                return (leanCoffee, topics) as (LeanCoffee, [HydratedTopic])
+            }
     }
 }

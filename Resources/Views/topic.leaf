@@ -1,8 +1,13 @@
-//
-//  File.swift
-//  File
-//
-//  Created by Jacob Rakidzich on 8/27/21.
-//
+#extend("base"):
+  #export("content"):
+    
+    <h1>Title: #(topic.title)</h1>
+    <h2>Description: #(topic.description)</h2>
+    <h2>Votes: #count(topic.votes)</h2>
+    <h2>Completed: #(topic.completed)</h2>
 
-import Foundation
+
+  <a href="#(topic.id)/votes/create"> Vote on this topic</a>
+
+  #endexport
+#endextend

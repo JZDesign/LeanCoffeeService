@@ -25,6 +25,12 @@ struct VoteController: RouteCollection {
             user: user.requireID()
         )
         
+        return try VoteController.create(req, vote)
+    }
+    
+    static func create(_ req: Request, _ vote: Vote) throws -> EventLoopFuture<Vote> {
+        let user = try req.auth.require(User.self)
+
         return Vote
             .query(on: req.db)
             .with(\.$topic)
@@ -33,7 +39,7 @@ struct VoteController: RouteCollection {
                 let dupe = allVotes
                     .filter {
                         $0.user == user.id
-                        && $0.topic.id == data.topicId
+                        && $0.$topic.id == vote.$topic.id
                     }
                 if dupe.count > 0 {
                     throw Abort(.conflict)
