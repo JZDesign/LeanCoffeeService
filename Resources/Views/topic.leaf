@@ -8,6 +8,9 @@
 
 
   <a href="#(topic.id)/votes/create"> Vote on this topic</a>
-
+  <br/>
+  #if(topic.completed == false):
+    <a href="#(topic.id)/complete"> Mark this topic as complete</a>
+  #endif
   #endexport
 #endextend

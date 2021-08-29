@@ -85,6 +85,12 @@ struct Router {
             .votes,
             .create,
             handler: TopicContext.voteHandler)
+        
+        protectedRoute.get(
+            .topics,
+            .parameter(.topicID),
+            .complete,
+            handler: TopicContext.completeHandler)
     }
     
     
@@ -105,7 +111,7 @@ enum LeanCoffeePathParameter: String {
 }
 
 enum LeanCoffeePath {
-    case login, logout, register, create, leanCoffee, topics, votes, edit, users, parameter(LeanCoffeePathParameter)
+    case login, logout, register, complete, create, leanCoffee, topics, votes, edit, users, parameter(LeanCoffeePathParameter)
     
     var path: PathComponent {
         switch self {
@@ -114,6 +120,7 @@ enum LeanCoffeePath {
         case .logout: return "logout"
         case .register: return "register"
         case .create: return "create"
+        case .complete: return "complete"
         case .leanCoffee: return "leanCoffee"
         case .topics: return "topics"
         case .votes: return "votes"

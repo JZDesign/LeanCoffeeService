@@ -48,6 +48,25 @@ struct TopicContext: Encodable {
             .transform(to: req.redirect(to: "/topics/\(topicID)"))
     }
     
+    
+    
+    static func completeHandler(_ req: Request) throws -> EventLoopFuture<Response> {
+        guard let topicID = req.getID("topicID") else {
+            return req.eventLoop.makeFailedFuture(Abort(.badRequest))
+        }
+
+        let user = try req.auth.require(User.self)
+        
+        return Topic
+            .findAndUnwrap(topicID, on: req.db)
+            .flatMapThrowing { (topic: Topic) -> Void in
+                topic.completed = true
+                try req.saveAndReturn(object: topic)
+                return ()
+            }.transform(to: req.redirect(to: "/topics/\(topicID)"))
+        
+    }
+    
 }
 
 struct CreateTopicContext: Encodable {
