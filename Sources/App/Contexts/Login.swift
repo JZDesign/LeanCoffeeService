@@ -32,6 +32,4 @@ struct LoginContext: Encodable {
             .encodeResponse(for: req)
       }
     }
-
-    
 }

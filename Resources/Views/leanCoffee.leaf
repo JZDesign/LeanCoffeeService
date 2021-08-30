@@ -27,15 +27,5 @@
             #endfor
             </tbody>
         </table>
-
-
-
-        
-<!--         
-        <form method="post" action="/leanCoffee/#(leanCoffee.id)/delete">
-            <a class="btn btn-primary" href="/leanCoffee/#(leanCoffee.id)/edit" role="button">Edit</a>
-            <input class="btn btn-danger" type="submit" value="Delete" />
-        </form> -->
-
     #endexport
 #endextend

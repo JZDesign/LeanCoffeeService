@@ -30,7 +30,6 @@ struct TopicContext: Encodable {
             }
     }
     
-    
     static func voteHandler(_ req: Request) throws -> EventLoopFuture<Response> {
         guard let topicID = req.getID("topicID") else {
             return req.eventLoop.makeFailedFuture(Abort(.badRequest))
@@ -46,8 +45,6 @@ struct TopicContext: Encodable {
             .transform(to: req.redirect(to: "/topics/\(topicID)"))
     }
     
-    
-    
     static func completeHandler(_ req: Request) throws -> EventLoopFuture<Response> {
         guard let topicID = req.getID("topicID") else {
             return req.eventLoop.makeFailedFuture(Abort(.badRequest))
@@ -59,12 +56,10 @@ struct TopicContext: Encodable {
             .findAndUnwrap(topicID, on: req.db)
             .flatMapThrowing { (topic: Topic) -> Void in
                 topic.completed = true
-                _ = try req.saveAndReturn(object: topic)
+                _ = req.saveAndReturn(object: topic)
                 return ()
             }.transform(to: req.redirect(to: "/topics/\(topicID)"))
-        
     }
-    
 }
 
 struct CreateTopicContext: Encodable {
@@ -122,7 +117,6 @@ struct CreateTopicContext: Encodable {
         }
     }
 }
-
 
 struct CreateTopicFormData: Content {
     let title: String

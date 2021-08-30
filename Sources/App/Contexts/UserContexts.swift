@@ -15,9 +15,6 @@ struct UserContext: Encodable {
     }
 }
 
-
-
-
 struct AllUsersContext: Encodable {
     let title: String
     let users: [User]

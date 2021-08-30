@@ -16,9 +16,6 @@
             <!-- <li class="nav-item #if(title == "All Users"): active #endif">
                 <a href="/users" class="nav-link">All Users</a>
             </li> -->
-            <!-- <li class="nav-item #if(title == "All Lean Coffe Events"): active #endif">
-                <a href="/leancoffee" class="nav-link">All Lean Coffe Events</a>
-            </li> -->
             <li class="nav-item #if(title == "Create A Lean Coffee"): active #endif">
                 <a href="/leanCoffee/create" class="nav-link">Create A Lean Coffee</a>
             </li>
