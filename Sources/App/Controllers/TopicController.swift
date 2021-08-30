@@ -75,7 +75,7 @@ struct TopicController: RouteCollection {
             .findAndUnwrap(req.getID(), on: req.db)
             .map {
                 $0.completed = true
-                $0.save(on: req.db)
+                _ = $0.save(on: req.db)
                 return $0
             }
     }

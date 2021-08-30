@@ -6,9 +6,6 @@ struct WebsiteController: RouteCollection {
         let sessionRoute = routes.grouped(User.sessionAuthenticator())
         let protectedRoute = sessionRoute.grouped(User.redirectMiddleware(path: LeanCoffeePath.login.value))
         let authRoute = sessionRoute.grouped(User.credentialsAuthenticator())
-        //        routes.get(use:{
-        //            $0.view.render("index")
-        //        })
         
         try Router(
             sessionRoute: sessionRoute,

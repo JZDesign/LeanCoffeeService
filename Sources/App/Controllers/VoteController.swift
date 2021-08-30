@@ -46,7 +46,7 @@ struct VoteController: RouteCollection {
                 }
             }
             .flatMapThrowing {
-                try vote.save(on: req.db)
+                _ = vote.save(on: req.db)
                 return vote
             }
     }

@@ -52,7 +52,6 @@ extension LeanCoffee {
         let lc = try LeanCoffee(title: data.title, host: user.requireID(), date: Date())
         
         return lc.save(on: req.db)
-//            .transform(to: req.redirect(to: "/"))
             .transform(to: req.redirect(to: lc.path))
     }
 }

@@ -1,16 +1,16 @@
 #extend("base"):
   #export("content"):
-    
-    <h1>Title: #(topic.title)</h1>
-    <h2>Description: #(topic.description)</h2>
-    <h2>Votes: #count(topic.votes)</h2>
-    <h2>Completed: #(topic.completed)</h2>
+    <h1>Topic</h1>
+    <p><span class="font-weight-bold text-secondary">Title:</span> #(topic.title)</p>
+    <p><span class="font-weight-bold text-secondary">Description:</span> #(topic.description)</p>
+    <p><span class="font-weight-bold text-secondary">Votes:</span> #count(topic.votes)</p>
+    <p><span class="font-weight-bold text-secondary">Completed:</span> #(topic.completed)</p>
 
 
-  <a href="#(topic.id)/votes/create"> Vote on this topic</a>
-  <br/>
   #if(topic.completed == false):
-    <a href="#(topic.id)/complete"> Mark this topic as complete</a>
+    <a class="btn btn-primary" href="#(topic.id)/votes/create"> Vote on this topic</a>
+    
+    <a class="btn btn-danger"  href="#(topic.id)/complete"> Mark this topic as complete</a>
   #endif
   #endexport
 #endextend

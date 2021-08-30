@@ -2,15 +2,19 @@
     <table class="table table-bordered table-hover">
         <thead class="thead-light">
         <tr>
-            <th>Lean Coffee</th>
+            <th>Lean Coffee Title</th>
+            <th>Date</th>
         </tr>
         </thead>
         <tbody>
             #for(lc in leanCoffeeEvents):
                 <tr>
-                <td>
-                <a href="/leanCoffee/#(lc.id)">#(lc.title)</a>
-                </td>
+                    <td>
+                        <a href="/leanCoffee/#(lc.id)">#(lc.title)</a>
+                    </td>                
+                    <td>
+                        <p>#date(lc.date, "yyyy-MM-dd")</p>
+                    </td>
                 </tr>
             #endfor
         </tbody>

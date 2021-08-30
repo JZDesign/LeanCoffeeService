@@ -15,8 +15,9 @@ struct LeanCoffeeContext: Encodable {
 
         return LeanCoffeeController.getHydratedTopics(req, idKey: "leanCoffeeID")
             .flatMap { (leanCoffee, topics) in
-                let sorted = topics.sorted { $1.votes.count < $0.votes.count
-                }
+                let sorted = topics
+                    .sorted { $1.votes.count < $0.votes.count }
+                    .sorted { !$0.completed && $1.completed }
                 return LeanCoffeeContext(
                     title: leanCoffee.title,
                     leanCoffee: leanCoffee,

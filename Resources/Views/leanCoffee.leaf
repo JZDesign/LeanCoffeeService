@@ -1,14 +1,36 @@
 #extend("base"):
     #export("content"):
-        <h1>#(leanCoffee.title)</h1>
+        <h1>LeanCoffee</h1>
+        <p><span class="font-weight-bold text-secondary">Title:</span> #(leanCoffee.title)</p>
         
-        <p>Created by <a href="/users/#(user.id)/">#(user.name)</a></p>
-        #for(topic in topics):
-            <a href="../topics/#(topic.id)"><p>#(topic.title): Votes: #count(topic.votes)</p></a>
-        #endfor
+        <p class="font-weight-thin text-secondary">Created by <a href="/users/#(user.id)/">#(user.name)</a> on #date(leanCoffee.date, "yyyy-MM-dd")</p>
+
+        <a class="font-weight-bold btn btn-primary mb-2" href="#(leanCoffee.id)/topics/create"> + Topic </a>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th>Topic Title</th>
+                <th>Votes</th>
+            </tr>
+            </thead>
+            <tbody>
+            #for(topic in topics):
+                <tr #if(topic.completed): class="p-3 mb-2 bg-success text-white" #endif>
+                    <td>
+                        <a #if(topic.completed): class="text-white" #endif href="../topics/#(topic.id)">#(topic.title)</a>
+                    </td>                
+                
+                    <td>
+                        <p> #count(topic.votes)</p>
+                    </td>
+                </tr>
+            #endfor
+            </tbody>
+        </table>
 
 
-        <a href="#(leanCoffee.id)/topics/create"> Create a topic </a>
+
+        
 <!--         
         <form method="post" action="/leanCoffee/#(leanCoffee.id)/delete">
             <a class="btn btn-primary" href="/leanCoffee/#(leanCoffee.id)/edit" role="button">Edit</a>

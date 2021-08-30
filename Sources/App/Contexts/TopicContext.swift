@@ -6,8 +6,6 @@ struct TopicContext: Encodable {
     let title: String
     let topic: Topic
     let user: User
-    //    let votes: [Vote]
-    //    let completed: Bool
     
     func view(_ req: Request) -> EventLoopFuture<View> { req.view.render("topic", self) }
     
@@ -55,13 +53,13 @@ struct TopicContext: Encodable {
             return req.eventLoop.makeFailedFuture(Abort(.badRequest))
         }
 
-        let user = try req.auth.require(User.self)
+        _ = try req.auth.require(User.self)
         
         return Topic
             .findAndUnwrap(topicID, on: req.db)
             .flatMapThrowing { (topic: Topic) -> Void in
                 topic.completed = true
-                try req.saveAndReturn(object: topic)
+                _ = try req.saveAndReturn(object: topic)
                 return ()
             }.transform(to: req.redirect(to: "/topics/\(topicID)"))
         
