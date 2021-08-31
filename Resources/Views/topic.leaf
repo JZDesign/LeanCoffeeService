@@ -1,5 +1,7 @@
 #extend("base"):
   #export("content"):
+    <a href="../leanCoffee/#(topic.leanCoffee.id)"><- #(topic.leanCoffee.title)</a>
+
     <h1>Topic</h1>
     <p><span class="font-weight-bold text-secondary">Title:</span> #(topic.title)</p>
     <p><span class="font-weight-bold text-secondary">Description:</span> #(topic.description)</p>

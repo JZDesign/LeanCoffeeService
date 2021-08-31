@@ -1,5 +1,6 @@
 #extend("base"):
     #export("content"):
+        <a href="../">Back</a>
         <h1>LeanCoffee</h1>
         <p><span class="font-weight-bold text-secondary">Title:</span> #(leanCoffee.title)</p>
         

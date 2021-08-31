@@ -19,6 +19,7 @@ struct TopicContext: Encodable {
             .query(on: req.db)
             .filter(\.$id == topicID)
             .with(\.$votes)
+            .with(\.$leanCoffee)
             .first()
             .unwrap(or: Abort(.notFound))
             .flatMap { topic in
