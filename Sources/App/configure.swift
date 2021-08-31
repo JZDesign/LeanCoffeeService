@@ -9,7 +9,7 @@ public func configure(_ app: Application) throws {
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.middleware.use(app.sessions.middleware)
 
-    configureDatabase(app)
+    configureHeroku(app: app) ?? configureDatabase(app)
 
     app.views.use(.leaf)
 
@@ -28,6 +28,18 @@ public func configure(_ app: Application) throws {
     try routes(app)
 }
 
+
+func configureHeroku(app: Application) -> Void? {
+    if var config = Environment.get("DATABASE_URL")
+        .flatMap(URL.init)
+        .flatMap(PostgresConfiguration.init) {
+            config.tlsConfiguration = .forClient(certificateVerification: .none)
+              app.databases.use(.postgres(configuration: config), as: .psql)
+        return ()
+    } else {
+        return nil
+    }
+}
 
 func configureDatabase(_ app: Application) {
     let hostname = Environment.get("DATABASE_HOST") ?? "localhost"
