@@ -61,6 +61,23 @@ struct TopicContext: Encodable {
                 return ()
             }.transform(to: req.redirect(to: "/topics/\(topicID)"))
     }
+    
+    
+    static func deleteHandler(_ req: Request) throws -> EventLoopFuture<Response> {
+        guard let leanCoffeeId = req.getID("topicID") else {
+            return req.eventLoop.makeFailedFuture(Abort(.badRequest))
+        }
+        
+        let user = try req.auth.require(User.self)
+        
+        return Topic
+            .findAndUnwrap(leanCoffeeId, on: req.db)
+            .flatMap {
+                let path = "/leancoffee/\($0.$leanCoffee.id)"
+                return $0.delete(on: req.db).transform(to: req.redirect(to: path))
+            }
+
+    }
 }
 
 struct CreateTopicContext: Encodable {

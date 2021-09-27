@@ -14,6 +14,8 @@ struct VoteController: RouteCollection {
         route.post(use: create)
         route.get(use: getAll)
         route.get(":id", use: getByID)
+        route.delete(":id", use: deleteVote)
+
     }
     
     func create(_ req: Request) throws -> EventLoopFuture<Vote> {
@@ -58,6 +60,15 @@ struct VoteController: RouteCollection {
     
     func getByID(_ req: Request) throws -> EventLoopFuture<Vote> {
         Vote.findAndUnwrap(req.getID(), on: req.db)
+    }
+    
+    func deleteVote(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        Vote
+            .find(req.getID(), on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap {
+                $0.delete(on: req.db).transform(to: .noContent)
+            }
     }
 
 }

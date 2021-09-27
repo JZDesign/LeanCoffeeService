@@ -9,10 +9,11 @@
     <p><span class="font-weight-bold text-secondary">Completed:</span> #(topic.completed)</p>
 
 
-  #if(topic.completed == false):
-    <a class="btn btn-primary" href="#(topic.id)/votes/create"> Vote on this topic</a>
-    
-    <a class="btn btn-danger"  href="#(topic.id)/complete"> Mark this topic as complete</a>
-  #endif
+    #if(topic.completed == false):
+      <a class="btn btn-primary" href="#(topic.id)/votes/create"> Vote on this topic</a>
+      
+      <a class="btn btn-secondary"  href="#(topic.id)/complete"> Mark this topic as complete</a>
+    #endif
+    <a class="btn btn-danger"  href="#(topic.id)/delete"> Delete </a>
   #endexport
 #endextend

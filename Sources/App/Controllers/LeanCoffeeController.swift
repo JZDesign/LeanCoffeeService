@@ -17,6 +17,10 @@ struct LeanCoffeeController: RouteCollection {
         route.get(":id", "host", use: getHost)
         route.get(":id", "topics", use: getAllTopics)
         
+        route.put(":id", use: update)
+
+        route.delete(":id", use: deleteLeanCoffee)
+
         route.webSocket(":id", "live") { req, webSocket in
             webSocket.send("connected")
         }
@@ -83,6 +87,34 @@ struct LeanCoffeeController: RouteCollection {
                     )
                 }
                 return (leanCoffee, topics) as (LeanCoffee, [HydratedTopic])
+            }
+    }
+    
+    
+    // MARK: - Put
+    
+    
+    func update(_ req: Request) throws -> EventLoopFuture<LeanCoffee> {
+        let data = try req.content.decode(CreateLeanCoffeeData.self)
+        let user = try req.auth.require(User.self)
+
+        return LeanCoffee
+            .findAndUnwrap(req.getID(), on: req.db)
+            .flatMap { lc in
+                lc.title = data.title
+                return req.saveAndReturn(object: lc)
+            }
+    }
+    
+    
+    // MARK: - Delete
+    
+    
+    func deleteLeanCoffee(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        LeanCoffee
+            .findAndUnwrap(req.getID(), on: req.db)
+            .flatMap {
+                $0.delete(on: req.db).transform(to: .noContent)
             }
     }
 }

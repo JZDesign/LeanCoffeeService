@@ -11,7 +11,7 @@ struct CreateTopic: Migration {
             .field("description", .string, .required)
             .field("introducer", .uuid, .required)
             .field("completed", .bool, .required)
-            .field("leanCoffeeId", .uuid, .required, .references(LeanCoffee.schema, "id"))
+            .field("leanCoffeeId", .uuid, .required, .references(LeanCoffee.schema, "id", onDelete: .cascade))
             .create()
     }
     

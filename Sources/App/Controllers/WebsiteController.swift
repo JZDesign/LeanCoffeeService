@@ -54,6 +54,13 @@ struct Router {
             .parameter(.leanCoffeeID),
             handler: LeanCoffeeContext.handler
         )
+        
+        protectedRoute.get(
+            .leanCoffee,
+            .parameter(.leanCoffeeID),
+            .delete,
+            handler: LeanCoffeeContext.deleteHandler
+        )
     }
     
     private func topicRoutes() throws {
@@ -88,6 +95,12 @@ struct Router {
             .parameter(.topicID),
             .complete,
             handler: TopicContext.completeHandler)
+        
+        protectedRoute.get(
+            .topics,
+            .parameter(.topicID),
+            .delete,
+            handler: TopicContext.deleteHandler)
     }
     
     
@@ -108,7 +121,7 @@ enum LeanCoffeePathParameter: String {
 }
 
 enum LeanCoffeePath {
-    case login, logout, register, complete, create, leanCoffee, topics, votes, edit, users, parameter(LeanCoffeePathParameter)
+    case login, logout, register, complete, create, delete, leanCoffee, topics, votes, edit, users, parameter(LeanCoffeePathParameter)
     
     var path: PathComponent {
         switch self {
@@ -118,6 +131,7 @@ enum LeanCoffeePath {
         case .register: return "register"
         case .create: return "create"
         case .complete: return "complete"
+        case .delete: return "delete"
         case .leanCoffee: return "leanCoffee"
         case .topics: return "topics"
         case .votes: return "votes"

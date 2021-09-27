@@ -20,6 +20,9 @@ struct TopicController: RouteCollection {
         route.get(":id", "introducer", use: getIntroducer)
         route.get(":id", "votes", use: getAllVotes)
         
+        route.put(":id", use: update)
+        route.delete(":id", use: deleteTopic)
+
         route.post(":id", "complete", use: completeTopic)
     }
     
@@ -77,6 +80,34 @@ struct TopicController: RouteCollection {
                 $0.completed = true
                 _ = $0.save(on: req.db)
                 return $0
+            }
+    }
+    
+    
+    // MARK: UPDATE
+    
+    
+    func update(_ req: Request) throws -> EventLoopFuture<Topic> {
+        let data = try req.content.decode(CreateTopicData.self)
+        let user = try req.auth.require(User.self)
+
+        return try getByID(req)
+            .flatMap { topic in
+                topic.title = data.title
+                topic.description = data.description ?? ""
+                return req.saveAndReturn(object: topic)
+            }
+    }
+    
+    
+    // MARK: - Delete
+    
+    
+    func deleteTopic(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        Topic
+            .findAndUnwrap(req.getID(), on: req.db)
+            .flatMap {
+                $0.delete(on: req.db).transform(to: .noContent)
             }
     }
 }
