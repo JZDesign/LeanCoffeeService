@@ -114,6 +114,32 @@ After that it's bearer token auth
     "date": "2021-08-21T19:25:10Z"
 }
 ```
+ 
+### Update Lean Coffee 
+
+**PUT** `{{URL}}/api/leancoffee`
+
+
+**Header** `Authorization: Bearer {{token value}}`
+
+
+**Request Body**
+
+```json
+{
+    "title": "A title"
+}
+```
+**Response**
+
+```json
+{
+    "id": "BE43F38A-4E52-4DC7-B8B7-0AEFCE42F914",
+    "title": "A title",
+    "host": "478E0ACB-DFC5-432B-B553-321399AF3735",
+    "date": "2021-08-21T19:25:10Z"
+}
+```
 
 ### Get Lean Coffee
 
@@ -211,6 +237,16 @@ After that it's bearer token auth
 ]
 ```
 
+
+### Delete a Lean Coffee
+
+**DELETE** `{{URL}}/api/leancoffee/{{leancoffee_id}}`
+
+**Header** `Authorization: Bearer {{token value}}`
+
+**Response** `204`
+
+
 </details>
 
 <details>
@@ -219,6 +255,41 @@ After that it's bearer token auth
 ### Create Topic
 
 **POST** `{{URL}}/api/topics`
+
+
+**Header** `Authorization: Bearer {{token value}}`
+
+
+**Request Body**
+
+```json
+{
+    "title": "A title",
+    "leanCoffeeId": "{{leancoffee_id}}",
+    "description": ""
+}
+```
+**Response**
+
+```json
+{
+    "leanCoffee": {
+        "id": "BE43F38A-4E52-4DC7-B8B7-0AEFCE42F914"
+    },
+    "id": "C6645F36-4DDB-44F4-8C76-1FB25A236A53",
+    "introducer": "478E0ACB-DFC5-432B-B553-321399AF3735",
+    "title": "A title",
+    "completed": false,
+    "description": ""
+}
+```
+
+
+### Update Topic
+
+Update the topic's title or description. 
+
+**PUT** `{{URL}}/api/topics`
 
 
 **Header** `Authorization: Bearer {{token value}}`
@@ -273,7 +344,7 @@ After that it's bearer token auth
 
 ### Complete Topic
 
-*The only way to update a topic (currently) and mark it as complete.*
+*The only way to mark it as complete.*
 
 **POST** `{{URL}}/api/topics/{{topic_id}}/complete`
 
@@ -337,6 +408,15 @@ After that it's bearer token auth
 ]
 ```
 
+### Delete a Topic
+
+**DELETE** `{{URL}}/api/topics/{{topic_id}}`
+
+**Header** `Authorization: Bearer {{token value}}`
+
+**Response** `204`
+
+
 </details>
 
 <details>
@@ -371,5 +451,15 @@ After that it's bearer token auth
     }
 }
 ```
+
+
+### Delete a Vote
+
+**DELETE** `{{URL}}/api/votes/{{vote_id}}`
+
+**Header** `Authorization: Bearer {{token value}}`
+
+**Response** `204`
+
 
 </details>
