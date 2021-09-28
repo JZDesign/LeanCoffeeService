@@ -15,6 +15,9 @@
                     <td>
                         <p>#date(lc.date, "yyyy-MM-dd")</p>
                     </td>
+                    <td>
+                        <a href="/leanCoffee/#(lc.id)/edit"> edit </a>
+                    </td>
                 </tr>
             #endfor
         </tbody>

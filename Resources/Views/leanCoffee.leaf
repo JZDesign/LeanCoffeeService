@@ -24,6 +24,10 @@
                     <td>
                         <p> #count(topic.votes)</p>
                     </td>
+
+                    <td>
+                        <a href="../topics/#(topic.id)/edit"> edit </a>
+                    </td>
                 </tr>
             #endfor
             </tbody>

@@ -58,6 +58,20 @@ struct Router {
         protectedRoute.get(
             .leanCoffee,
             .parameter(.leanCoffeeID),
+            .edit,
+            handler: EditLeanCoffeeContext.handler
+        )
+        
+        protectedRoute.post(
+            .leanCoffee,
+            .parameter(.leanCoffeeID),
+            .edit,
+            handler: EditLeanCoffeeContext.postHandler
+        )
+        
+        protectedRoute.get(
+            .leanCoffee,
+            .parameter(.leanCoffeeID),
             .delete,
             handler: LeanCoffeeContext.deleteHandler
         )
@@ -82,6 +96,22 @@ struct Router {
             .topics,
             .create,
             handler: CreateTopicContext.postHandler)
+        
+        
+        protectedRoute.get(
+            .topics,
+            .parameter(.topicID),
+            .edit,
+            handler: EditTopicContext.handler
+        )
+        
+        protectedRoute.post(
+            .topics,
+            .parameter(.topicID),
+            .edit,
+            handler: EditTopicContext.postHandler
+        )
+        
         
         protectedRoute.get(
             .topics,
